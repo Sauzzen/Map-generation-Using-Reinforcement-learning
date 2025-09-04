@@ -25,7 +25,7 @@ TARGET_UPDATE = 2000  # steps for hard target update
 os.makedirs("worlds", exist_ok=True)
 os.makedirs("checkpoints", exist_ok=True)
 os.makedirs("metrics", exist_ok=True)
-os.makedirs("heatmaps", exist_ok=True)  # ✅ Folder for heatmaps
+os.makedirs("heatmaps", exist_ok=True)  # Folder for heatmaps
 RESUME_FILE = "checkpoints/resume.json"
 
 # -----------------
@@ -56,7 +56,7 @@ def main():
     step_count, best_score = load_resume()
     best_world = None
 
-    print(f"🌍 Training world {WORLD_SIZE}x{WORLD_SIZE} (Perlin-noise initialized)")
+    print(f" Training world {WORLD_SIZE}x{WORLD_SIZE} (Perlin-noise initialized)")
 
     # ----------------- initialize environment & agent -----------------
     env = MapEnvironment(size=WORLD_SIZE)
@@ -68,7 +68,7 @@ def main():
     best_model_path = "checkpoints/best_model.h5"
     if os.path.exists(best_model_path):
         agent.load(best_model_path)
-        print("✅ Loaded previous best model.")
+        print(" Loaded previous best model.")
 
     # ----------------- training episodes -----------------
     for episode in range(1, EPISODES + 1):
@@ -94,12 +94,12 @@ def main():
             # Update target network
             if step_count % TARGET_UPDATE == 0:
                 agent.soft_update(tau=1.0)
-                print(f"[Step {step_count}] 🔄 Target network updated.")
+                print(f"[Step {step_count}]  Target network updated.")
 
         # ----------------- Save maps and heatmaps -----------------
         world = env.get_full_world()
         visualize_map.save_full_map(world, episode, save_dir="worlds")
-        visualize_map.save_heatmap(world, episode, save_dir="heatmaps")  # ✅ Heatmap
+        visualize_map.save_heatmap(world, episode, save_dir="heatmaps")  #  Heatmap
 
         # Metrics logging
         metrics.log(episode, world, total_reward)
@@ -120,7 +120,7 @@ def main():
             checkpoint_path = f"checkpoints/ep{episode}.h5"
             agent.save(checkpoint_path)
             save_resume(step_count, best_score)
-            print(f"[Episode {episode}] ✅ Checkpoint saved")
+            print(f"[Episode {episode}]  Checkpoint saved")
             metrics.plot(show=False, save_path=f"metrics/metrics_ep{episode}.png")
 
     # ----------------- Final rule-based polish -----------------
@@ -129,9 +129,9 @@ def main():
         polished_world = polisher.apply(best_world)
         visualize_map.save_full_map(polished_world, "final_best", save_dir="worlds")
         visualize_map.save_heatmap(polished_world, "final_best", save_dir="heatmaps")
-        print("🏁 Training complete. Polished best world saved.")
+        print(" Training complete. Polished best world saved.")
     else:
-        print("⚠️ No best world generated!")
+        print(" No best world generated!")
 
     # Plot final metrics
     metrics.plot(show=True, save_path="metrics/metrics_final.png")

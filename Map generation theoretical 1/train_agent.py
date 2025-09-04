@@ -238,7 +238,7 @@ class RLAgent:
             "total_steps": self.total_steps,
             "learn_steps": self.learn_steps
         }, path)
-        print(f"💾 Saved checkpoint to {path}")
+        print(f" Saved checkpoint to {path}")
 
     def load(self, path: str):
         data = torch.load(path, map_location=self.device)
@@ -248,10 +248,10 @@ class RLAgent:
             try:
                 self.optimizer.load_state_dict(data["optimizer"])
             except Exception:
-                print("⚠️ Could not load optimizer state.")
+                print(" Could not load optimizer state.")
         self.total_steps = data.get("total_steps", 0)
         self.learn_steps = data.get("learn_steps", 0)
-        print(f"🔁 Loaded checkpoint from {path}")
+        print(f" Loaded checkpoint from {path}")
 
     # -----------------
     # Reset training
@@ -267,7 +267,7 @@ class RLAgent:
             self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
         else:
             self.optimizer = optim.Adam(self.policy_net.parameters(), lr=self.optimizer.param_groups[0]["lr"])
-        print("🔁 Training reset (networks reinitialized, memory cleared).")
+        print(" Training reset (networks reinitialized, memory cleared).")
 
     # -----------------
     # Info
